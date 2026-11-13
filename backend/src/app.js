@@ -6,6 +6,9 @@ import { requireAuth } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.js';
 import activityRoutes from './routes/activity.js';
+import reviewsRoutes from './routes/reviews.js';
+import statsRoutes from './routes/stats.js';
+import profileRoutes from './routes/profile.js';
 import gamesRoutes from './routes/games.js';
 import libraryRoutes from './routes/library.js';
 
@@ -39,6 +42,9 @@ app.use('/api/auth', authRoutes);
 
 // Rutas privadas: todas pasan por requireAuth
 app.use('/api/activity', requireAuth, activityRoutes);
+app.use('/api/reviews', requireAuth, reviewsRoutes);
+app.use('/api/stats', requireAuth, statsRoutes);
+app.use('/api/profile', requireAuth, profileRoutes);
 app.use('/api/games', requireAuth, gamesRoutes);
 app.use('/api/library', requireAuth, libraryRoutes);
 
