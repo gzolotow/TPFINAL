@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Explore from './pages/Explore';
 import Library from './pages/Library';
+import Profile from './pages/Profile';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <Route element={<PublicOnlyRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
       </Route>
 
       {/* Rutas privadas: requieren sesión */}
@@ -23,6 +25,7 @@ export default function App() {
           <Route path="/" element={<h1>Inicio</h1>} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
     </Routes>
