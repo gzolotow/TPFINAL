@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { query, withTransaction } from '../db.js';
 import { asyncHandler, conflict, notFound } from '../utils/httpError.js';
 import { assertValid, parseId, STATUSES } from '../utils/validate.js';
-import { parseGamePayload, upsertGame } from '../utils/games.js';
+import { enrichGame, parseGamePayload, upsertGame } from '../utils/games.js';
 import { logActivity } from '../utils/activity.js';
 
 const router = Router();
@@ -81,7 +81,7 @@ router.get(
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const game = parseGamePayload(req.body?.game);
+    const game = await enrichGame(parseGamePayload(req.body?.game));
     const status = req.body?.status ?? 'want_to_play';
     const isFavorite = req.body?.is_favorite === true;
     if (!STATUSES.includes(status)) assertValid({ status: 'Estado inválido' });
@@ -219,4 +219,3 @@ router.delete(
 );
 
 export default router;
-        

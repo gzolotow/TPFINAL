@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from './components/PublicOnlyRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Explore from './pages/Explore';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route element={<Layout />}>
           {/* Provisoria: Canievsky la reemplaza por <Home /> */}
           <Route path="/" element={<h1>Inicio</h1>} />
+          <Route path="/explore" element={<Explore />} />
         </Route>
       </Route>
     </Routes>
