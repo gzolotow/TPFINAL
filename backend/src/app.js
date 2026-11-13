@@ -3,6 +3,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import activityRoutes from './routes/activity.js';
 import { requireAuth } from './middleware/auth.js';
+import reviewsRoutes from './routes/reviews.js';
+import statsRoutes from './routes/stats.js';
+
   import profileRoutes from './routes/profile.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.js';
@@ -35,6 +38,10 @@ app.get('/api/health', (req, res) => res.json({ ok: true }));
 // Rutas públicas
 app.use('/api/auth', authRoutes);
   app.use('/api/activity', requireAuth, activityRoutes);
+
+       app.use('/api/reviews', requireAuth, reviewsRoutes);
+     app.use('/api/stats', requireAuth, statsRoutes);
+
   app.use('/api/profile', requireAuth, profileRoutes);
 // Rutas privadas: cada uno agrega acá su línea con requireAuth cuando sube su ruta
 
