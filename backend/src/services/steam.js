@@ -23,7 +23,7 @@ async function cached(key, ttl, load) {
 async function steamJson(path) {
   let response;
   try {
-    response = await fetch(`${STORE}${path}`, { signal: AbortSignal.timeout(10000) });
+    response = await fetch(`${STORE}${path}`, { signal: AbortSignal.timeout(8000) });
   } catch {
     throw new HttpError(502, 'No se pudo conectar con Steam');
   }
@@ -85,28 +85,55 @@ export function getGameDetails(appId) {
   });
 }
 
-// Busca varios detalles en paralelo y descarta los que fallen
-async function detailsFor(ids, limit) {
-  const results = await Promise.allSettled(ids.slice(0, limit).map((id) => getGameDetails(id)));
-  return results.filter((r) => r.status === 'fulfilled' && r.value).map((r) => r.value);
+// Datos básicos a partir de lo que ya trae una lista de Steam (sin pedir el detalle)
+function basicFromListItem(item) {
+  const platforms = item.platforms
+    ? Object.entries(item.platforms).filter(([, ok]) => ok).map(([name]) => ({ windows: 'Windows', mac: 'Mac', linux: 'Linux' })[name] ?? name)
+    : [item.windows_available && 'Windows', item.mac_available && 'Mac', item.linux_available && 'Linux'].filter(Boolean);
+  return {
+    id: item.id,
+    slug: String(item.id),
+    name: item.name,
+    cover_url: item.header_image ?? item.large_capsule_image ?? item.tiny_image ?? null,
+    released: null,
+    genres: [],
+    platforms,
+    metacritic: item.metascore ? Number(item.metascore) || null : null,
+  };
+}
+
+// Pide los detalles en paralelo. Si alguno falla o tarda, usamos los datos básicos de la lista
+// en vez de perder el resultado. Los que no son juegos (DLC, música...) se descartan.
+async function enrich(items, limit) {
+  const chosen = items.slice(0, limit);
+  const results = await Promise.allSettled(chosen.map((item) => getGameDetails(item.id)));
+  return results
+    .map((result, i) => {
+      if (result.status === 'fulfilled') return result.value; // null = no es un juego
+      return basicFromListItem(chosen[i]);
+    })
+    .filter(Boolean);
 }
 
 // Búsqueda por texto
-export function searchGames(term, limit = 12) {
+export function searchGames(term, limit = 10) {
   return cached(`search:${term.toLowerCase()}`, LIST_TTL, async () => {
     const json = await steamJson(`/storesearch/?term=${encodeURIComponent(term)}&${LANG}`);
-    const ids = (json.items ?? []).filter((item) => item.type === 'app').map((item) => item.id);
-    return detailsFor(ids, limit);
+    const items = (json.items ?? []).filter((item) => item.type === 'app');
+    return enrich(items, limit);
   });
 }
 
-// Destacados: más vendidos + novedades de la tienda
+// Destacados: más vendidos + novedades de la tienda.
+// Usamos directo los datos de la lista (un solo pedido a Steam), así carga rápido.
 export function getFeaturedGames(limit = 12) {
   return cached('featured', LIST_TTL, async () => {
     const json = await steamJson(`/featuredcategories?${LANG}`);
     const items = [...(json.top_sellers?.items ?? []), ...(json.new_releases?.items ?? [])];
-    const ids = [...new Set(items.map((item) => item.id))];
-    // Pedimos algunos de más porque los que no son juegos (DLC, paquetes) se descartan
-    return (await detailsFor(ids, limit + 8)).slice(0, limit);
+    const seen = new Set();
+    return items
+      .filter((item) => (item.type ?? 0) === 0 && item.id && item.name && !seen.has(item.id) && seen.add(item.id))
+      .slice(0, limit)
+      .map(basicFromListItem);
   });
 }

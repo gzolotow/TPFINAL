@@ -19,19 +19,19 @@ export async function searchGames({ search, platform = '', genre = '', sort = 'r
   const params = { q: search.trim(), sort };
   if (platform) params.platform = platform;
   if (genre) params.genre = genre;
-  const { data } = await api.get('/games/search', { params });
+  const { data } = await api.get('/games/search', { params, timeout: 30000 });
   return data.games;
 }
 
 // Más vendidos y novedades de la tienda
 export async function getFeaturedGames() {
-  const { data } = await api.get('/games/featured');
+  const { data } = await api.get('/games/featured', { timeout: 30000 });
   return data.games;
 }
 
 // Detalle completo (descripción, capturas, desarrolladores, precio)
 export async function getGameDetail(id) {
-  const { data } = await api.get(`/games/${id}`);
+  const { data } = await api.get(`/games/${id}`, { timeout: 30000 });
   return data.game;
 }
 
