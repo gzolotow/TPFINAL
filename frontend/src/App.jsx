@@ -5,6 +5,7 @@ import PublicOnlyRoute from './components/PublicOnlyRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Explore from './pages/Explore';
+import Library from './pages/Library';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           {/* Provisoria: Canievsky la reemplaza por <Home /> */}
           <Route path="/" element={<h1>Inicio</h1>} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/library" element={<Library />} />
         </Route>
       </Route>
     </Routes>
