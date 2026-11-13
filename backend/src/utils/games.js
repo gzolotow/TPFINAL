@@ -1,4 +1,5 @@
-    import { assertValid, isNonEmptyString } from './validate.js';
+import { assertValid, isNonEmptyString } from './validate.js';
+import { getGameDetails } from '../services/steam.js';
 
 // Valida los datos del juego que manda el frontend (sacados de Steam)
 // y devuelve un objeto limpio.
@@ -49,4 +50,25 @@ export async function upsertGame(db, game) {
        updated_at = now()`,
     [game.id, game.slug, game.name, game.cover_url, game.released, game.genres, game.platforms, game.metacritic]
   );
+}
+
+// Si al juego le faltan datos (por ejemplo, vino de la lista de destacados, que no trae
+// géneros ni fecha), los completamos con el detalle de Steam antes de guardarlo.
+// Si Steam no responde, se guarda igual con lo que hay.
+export async function enrichGame(game) {
+  if (game.genres.length > 0 && game.released) return game;
+  try {
+    const details = await getGameDetails(game.id);
+    if (!details) return game;
+    return {
+      ...game,
+      cover_url: game.cover_url ?? details.cover_url,
+      released: game.released ?? details.released,
+      genres: game.genres.length ? game.genres : details.genres,
+      platforms: game.platforms.length ? game.platforms : details.platforms,
+      metacritic: game.metacritic ?? details.metacritic,
+    };
+  } catch {
+    return game;
+  }
 }
