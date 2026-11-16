@@ -9,6 +9,11 @@ import Register from './pages/Register';
 import Explore from './pages/Explore';
 import Library from './pages/Library';
 import Profile from './pages/Profile';
+import Collections from './pages/Collections';
+import CollectionDetail from './pages/CollectionDetail';
+import Stats from './pages/Stats';
+import NotFound from './pages/NotFound';
+
 
 export default function App() {
   return (
@@ -29,6 +34,10 @@ export default function App() {
                     <Route path="/games/:slug" element={<GameDetail />} />
           <Route path="/library" element={<Library />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/collections" element={<Collections />} />
+          <Route path="/collections/:id" element={<CollectionDetail />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
     </Routes>
