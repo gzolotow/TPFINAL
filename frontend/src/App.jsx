@@ -1,3 +1,4 @@
+import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -22,7 +23,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           {/* Provisoria: Canievsky la reemplaza por <Home /> */}
-          <Route path="/" element={<h1>Inicio</h1>} />
+         <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/library" element={<Library />} />
           <Route path="/profile" element={<Profile />} />
