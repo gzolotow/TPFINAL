@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import collectionsRoutes from './routes/collections.js';
 
 import { requireAuth } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
@@ -47,6 +48,7 @@ app.use('/api/stats', requireAuth, statsRoutes);
 app.use('/api/profile', requireAuth, profileRoutes);
 app.use('/api/games', requireAuth, gamesRoutes);
 app.use('/api/library', requireAuth, libraryRoutes);
+app.use('/api/collections', requireAuth, collectionsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
