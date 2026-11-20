@@ -28,7 +28,7 @@ Aplicación web full stack para llevar el registro personal de tus videojuegos: 
 
 | Integrante | GitHub | Principales aportes |
 |---|---|---|
-| Gael Zolotow | [@gzolotow](https://github.com/gzolotow) | Pantalla Perfil, configuración de deploy en Vercel |
+| Gael Zolotow | [@gzolotow](https://github.com/gzolotow) | Base del proyecto (React + Vite, estilos globales, proxy a la API), autenticación (JWT en cookie httpOnly, register/login/logout/me, `requireAuth`), AuthContext, cliente Axios con manejo de sesión vencida, rutas públicas y protegidas, navbar, componentes base, pantallas de Login y Registro, migración de RAWG a Steam, pantalla Perfil y deploy en Vercel |
 | Julián Canievsky | [@JulianCanievsky](https://github.com/JulianCanievsky) | Home con destacados de Steam, Biblioteca, Detalle del juego |
 | Julián Hofman | [@JulianHofman09](https://github.com/JulianHofman09) | Colecciones, seed de la cuenta demo, reseñas, Estadísticas y 404 |
 
