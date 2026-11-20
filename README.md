@@ -1,4 +1,4 @@
-# 🎮 My Collection · Videojuegos
+# My Collection · Videojuegos
 
 Aplicación web full stack para llevar el registro personal de tus videojuegos: buscás juegos reales de la tienda de Steam, los agregás a tu biblioteca con un estado (*Quiero jugar*, *Jugando*, *Terminado*, *Abandonado*), los puntuás, escribís reseñas, armás colecciones y ves estadísticas calculadas a partir de tus propios datos.
 
@@ -6,7 +6,7 @@ Aplicación web full stack para llevar el registro personal de tus videojuegos: 
 
 ---
 
-## 📑 Índice
+##  Índice
 
 - [Integrantes](#-integrantes)
 - [Cómo resolvimos la temática](#-cómo-resolvimos-la-temática)
@@ -24,17 +24,17 @@ Aplicación web full stack para llevar el registro personal de tus videojuegos: 
 
 ---
 
-## 👥 Integrantes
+##  Integrantes
 
 | Integrante | GitHub | Principales aportes |
 |---|---|---|
-| Gael Zolotow | [@gzolotow](https://github.com/gzolotow) | Base del proyecto (React + Vite, estilos globales, proxy a la API), autenticación (JWT en cookie httpOnly, register/login/logout/me, `requireAuth`), AuthContext, cliente Axios con manejo de sesión vencida, rutas públicas y protegidas, navbar, componentes base, pantallas de Login y Registro, migración de RAWG a Steam, pantalla Perfil y deploy en Vercel |
-| Julián Canievsky | [@JulianCanievsky](https://github.com/JulianCanievsky) | Home con destacados de Steam, Biblioteca, Detalle del juego |
-| Julián Hofman | [@JulianHofman09](https://github.com/JulianHofman09) | Colecciones, seed de la cuenta demo, reseñas, Estadísticas y 404 |
+| Gael Zolotow | [@gzolotow](https://github.com/gzolotow) 
+| Julián Canievsky | [@JulianCanievsky](https://github.com/JulianCanievsky) 
+| Julián Hofman | [@JulianHofman09](https://github.com/JulianHofman09) 
 
 ---
 
-## 🎯 Cómo resolvimos la temática
+##  Cómo resolvimos la temática
 
 La consigna era una app de "My Collection" sobre una temática a elección. Elegimos **videojuegos** y adaptamos cada parte del sistema a cómo una persona realmente lleva su registro de juegos.
 
@@ -91,7 +91,7 @@ La consigna era una app de "My Collection" sobre una temática a elección. Eleg
 
 ---
 
-## 🛠 Tecnologías
+##  Tecnologías
 
 | Capa | Tecnologías |
 |---|---|
@@ -123,7 +123,7 @@ La consigna era una app de "My Collection" sobre una temática a elección. Eleg
 
 ---
 
-## 📁 Estructura del repositorio
+##  Estructura del repositorio
 
 ```
 TPFINAL/
@@ -202,7 +202,7 @@ npm run dev               # App en http://localhost:5173
 
 ---
 
-## 🔐 Variables de entorno
+##  Variables de entorno
 
 Los archivos `.env` **no se suben al repositorio**; hay un `.env.example` en cada carpeta.
 
@@ -227,7 +227,7 @@ Los archivos `.env` **no se suben al repositorio**; hay un `.env.example` en cad
 
 ---
 
-## 🧪 Cuenta demo
+##  Cuenta demo
 
 `npm run seed` crea el usuario **`demo_gamer`** (con el correo y contraseña definidos en `DEMO_EMAIL` / `DEMO_PASSWORD`) con historia ya cargada:
 
@@ -239,7 +239,7 @@ Si Steam no responde, el seed usa datos de respaldo (sin portada), así que tamb
 
 ---
 
-## 🗄 Base de datos
+##  Base de datos
 
 Esquema completo en [`backend/db/schema.sql`](backend/db/schema.sql).
 
@@ -262,8 +262,7 @@ users 1──N library_items N──1 games
 ```
 
 ---
-
-## 📡 API REST
+##  API REST
 
 Base: `/api`. Todas las rutas, salvo `/auth/*` y `/health`, requieren sesión (cookie `mc_token` o header `Authorization: Bearer <token>` para probar con Postman).
 Los errores se devuelven como `{ "error": "mensaje", "details": { "campo": "mensaje" } }`.
@@ -322,7 +321,7 @@ Los errores se devuelven como `{ "error": "mensaje", "details": { "campo": "mens
 
 ---
 
-## 🛡 Seguridad
+##  Seguridad
 
 - **Contraseñas** hasheadas con `bcrypt` (10 rondas); nunca se devuelve `password_hash`.
 - **JWT en cookie `httpOnly`** (inaccesible desde JavaScript → protege contra XSS), `SameSite=Lax` (protege contra CSRF) y `Secure` en producción.
@@ -341,4 +340,4 @@ Los errores se devuelven como `{ "error": "mensaje", "details": { "campo": "mens
 - **Base de datos → PostgreSQL en la nube** (Neon o Render). Se inicializa una vez con `npm run db:schema` y `npm run seed` apuntando a esa `DATABASE_URL`.
 - **Frontend → Vercel**: root `frontend/`, build `npm run build`, output `dist/`. El archivo `vercel.json` reenvía `/api/*` al backend de Render y manda el resto de las rutas a `index.html` para que funcione React Router.
 
-> ℹ️ En el plan gratuito de Render el servidor se duerme tras un rato sin uso: la primera petición puede tardar unos segundos.
+>  En el plan gratuito de Render el servidor se duerme tras un rato sin uso: la primera petición puede tardar unos segundos.
